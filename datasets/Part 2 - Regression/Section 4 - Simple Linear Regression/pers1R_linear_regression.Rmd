@@ -1,0 +1,63 @@
+---
+title: "Linear Regression"
+author: "ASR"
+date: "22/9/2021"
+output: html_document
+---
+
+## Linear Regression in R
+
+# Importar el dataset
+```{r}
+dataset = read.csv('Salary_Data.csv')
+```
+
+# Dividir en conjunto de test y entrenamiento
+```{r}
+library(caTools)
+split = sample.split(dataset$Salary, SplitRatio=2/3)
+split
+```
+
+# Subsets
+```{r}
+training_set = subset(dataset,split == TRUE)
+testing_set = subset(dataset,split == FALSE)
+```
+
+# Preparar modelo de Regresión Lineal Simple
+```{r}
+regression = lm(formula=Salary ~ YearsExperience,
+                data = training_set)
+summary(regression)
+```
+
+# Predict teniendo los mismos datos y con el mismo formato que los datos de training
+```{r}
+y_pred = predict(regression,newdata=testing_set)
+y_pred
+```
+     
+
+# Visualización gráfica de los resultados
+```{r}
+library(ggplot2)
+
+ggplot() + 
+  geom_point(aes(x= training_set$YearsExperience,y=training_set$Salary), colour="red") +
+  geom_line(aes(x=training_set$YearsExperience,y=predict(regression,newdata = training_set)), colour="blue") +
+  ggtitle("Sueldo vs Años Experiencia") + 
+  xlab("Años de experiencia") + 
+  ylab("Sueldo en $")
+
+```
+
+```{r}
+ggplot() + 
+  geom_point(aes(x= testing_set$YearsExperience,y=testing_set$Salary), colour="red") +
+  geom_line(aes(x=training_set$YearsExperience,y=predict(regression,newdata = training_set)), colour="blue") +
+  ggtitle("Sueldo vs Años Experiencia - Resultados testing") + 
+  xlab("Años de experiencia") + 
+  ylab("Sueldo en $")
+
+```
