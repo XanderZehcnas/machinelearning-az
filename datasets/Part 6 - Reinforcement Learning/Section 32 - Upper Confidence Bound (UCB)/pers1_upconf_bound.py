@@ -41,3 +41,5 @@ for n in range(0, N):
     sums_of_rewards[ad] = sums_of_rewards[ad] + reward
     total_reward = total_reward + reward
 
+# Visualización
+plt.hist(ads_selected)
